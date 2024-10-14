@@ -71,14 +71,14 @@
                                                 @if(isset($var_validEntries) && count($var_validEntries) > 0)
                                                     @foreach($var_validEntries as $data)
                                                         <tr>
-                                                            <td>{{ $data['var_nome'] ?? 'N/A' }}</td>
-                                                            <td>{{ \Carbon\Carbon::parse($data['var_nascimento'])->format('d/m/Y') ?? 'N/A' }}
+                                                            <td>{{ $data['nome'] ?? 'N/A' }}</td>
+                                                            <td>{{ $data['nascimento'] ?? 'N/A' }}
                                                             </td>
-                                                            <td>{{ $data['var_codigo'] ?? 'N/A' }}</td>
-                                                            <td>{{ $data['var_guia'] ?? 'N/A' }}</td>
-                                                            <td>{{ \Carbon\Carbon::parse($data['var_entrada'])->format('d/m/Y') ?? 'N/A' }}
+                                                            <td>{{ $data['codigo'] ?? 'N/A' }}</td>
+                                                            <td>{{ $data['guia'] ?? 'N/A' }}</td>
+                                                            <td>{{ $data['entrada'] ?? 'N/A' }}
                                                             </td>
-                                                            <td>{{ \Carbon\Carbon::parse($data['var_saida'])->format('d/m/Y') ?? 'N/A' }}
+                                                            <td>{{ $data['saida'] ?? 'N/A' }}
                                                             </td>
                                                         </tr>
                                                     @endforeach
@@ -114,14 +114,14 @@
                                                 @if(isset($var_invalidEntries) && count($var_invalidEntries) > 0)
                                                     @foreach($var_invalidEntries as $data)
                                                         <tr>
-                                                            <td>{{ $data['var_nome'] ?? 'N/A' }}</td>
-                                                            <td>{{ \Carbon\Carbon::parse($data['var_nascimento'])->format('d/m/Y') ?? 'N/A' }}
+                                                            <td>{{ $data['nome'] ?? 'N/A' }}</td>
+                                                            <td>{{$data['nascimento'] ?? 'N/A' }}
                                                             </td>
-                                                            <td>{{ $data['var_codigo'] ?? 'N/A' }}</td>
-                                                            <td>{{ $data['var_guia'] ?? 'N/A' }}</td>
-                                                            <td>{{ \Carbon\Carbon::parse($data['var_entrada'])->format('d/m/Y') ?? 'N/A' }}
+                                                            <td>{{ $data['codigo'] ?? 'N/A' }}</td>
+                                                            <td>{{ $data['guia'] ?? 'N/A' }}</td>
+                                                            <td>{{ $data['entrada'] ?? 'N/A' }}
                                                             </td>
-                                                            <td>{{ \Carbon\Carbon::parse($data['var_saida'])->format('d/m/Y') ?? 'N/A' }}
+                                                            <td>{{ $data['saida'] ?? 'N/A' }}
                                                             </td>
                                                         </tr>
                                                     @endforeach

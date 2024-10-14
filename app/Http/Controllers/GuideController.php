@@ -174,28 +174,51 @@ class GuideController extends Controller
         ]);
 
         $headers = ['nome', 'nascimento', 'codigo', 'guia', 'entrada', 'saida'];
+
         $dataFile = file($request->file('csvFile'));
-        $dataFile = array_slice($dataFile, 1);
+
+        // Converte cada linha de vírgula para ponto e vírgula
+        $dataFile = array_map(function ($line) {
+            return str_replace(',', ';', $line);
+        }, $dataFile);
+
+        //dd(file($request->file('csvFile')));
+        // $dataFile = array_slice($dataFile, 1);
+
         $csvData = array_map('str_getcsv', $dataFile);
+
+
+        $csvData = array_slice($csvData, 1);
+
+        //dd(array_map('str_getcsv', $dataFile));
 
         $arrayValues = [];
         foreach ($csvData as $keyData => $row) {
+            //dd($csvData);
+            $values = explode(';', $row[0]);
+            //dd($values);
             foreach ($headers as $key => $header) {
-                $arrayValues[$keyData]["var_$header"] = $row[$key];
+                //Atribuir valor ao elemento do array
+                $arrayValues[$keyData][$header] = $values[$key];
+
             }
         }
+        //dd($arrayValues);
 
         // Realizar a validação conforme as regras de negócio
         foreach ($arrayValues as $key => $row) {
 
             //dd($arrayValues);
-            $nome = trim($row['var_nome']);
-            $codigo = trim($row['var_codigo']);
-            $guia = trim($row['var_guia']);
-            $nascimento = trim($row['var_nascimento']);
-            $entrada = trim($row['var_entrada']);
-            $saida = trim($row['var_saida']);
-
+            $nome = trim($row['nome']);
+            $codigo = trim($row['codigo']);
+            $guia = trim($row['guia']);
+            $nascimento = trim($row['nascimento']);
+            $entrada = trim($row['entrada']);
+            $saida = trim($row['saida']);
+            // $nascimento = Carbon::parse($row['nascimento'])->format('Y-m-d');
+            // $entrada = Carbon::parse($row['entrada'])->format('Y-m-d');
+            // $saida = Carbon::parse($row['saida'])->format('Y-m-d');
+            //dd($nascimento);
             // try {
             //     // Certificar que a data esteja no formato esperado "d/m/Y"
             //     if (!preg_match('/^\d{2}\/\d{2}\/\d{4}$/', trim($row['var_nascimento']))) {
@@ -294,29 +317,29 @@ class GuideController extends Controller
             if ($row['var_isValid']) {
                 // Se o paciente já existir, utilizar o ID, senão criar um novo
                 $patient = Patient::whereHas('user', function ($query) use ($row) {
-                    $query->where('name', $row['var_nome'])
-                        ->where('birth_date', Carbon::parse($row['var_nascimento']));
+                    $query->where('name', $row['nome'])
+                        ->where('birth_date', Carbon::parse($row['nascimento']));
                 })->first();
 
                 if (!$patient) {
                     $user = User::create([
-                        'name' => $row['var_nome'],
+                        'name' => $row['nome'],
                         'email' => 'sem@email.com',
                         'password' => bcrypt('defaultpassword'),
-                        'birth_date' => Carbon::parse($row['var_nascimento']),
+                        'birth_date' => Carbon::parse($row['nascimento']),
                     ]);
 
                     $patient = Patient::create([
                         'user_id' => $user->id,
-                        'social_number' => $row['var_codigo'],
+                        'social_number' => $row['codigo'],
                     ]);
                 }
 
                 Guide::create([
                     'patient_id' => $patient->id,
-                    'description' => $row['var_guia'],
-                    'entry' => Carbon::parse($row['var_entrada']),
-                    'exit' => isset($row['var_saida']) ? Carbon::parse($row['var_saida']) : null,
+                    'description' => $row['guia'],
+                    'entry' => Carbon::parse($row['entrada']),
+                    'exit' => isset($row['saida']) ? Carbon::parse($row['saida']) : null,
                 ]);
             }
         }
