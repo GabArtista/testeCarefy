@@ -39,8 +39,7 @@
                                             <a href="{{ route('hospitalization.listPatients') }}"
                                                 class="btn btn-icon btn-outline-primary"
                                                 title="Adicionar Nova Internação">
-                                                <i class="feather icon-plus"></i> Adicionar Nova Internação
-                                            </a>
+                                                <i class="feather icon-plus"></i></a>
                                         </div>
                                     </div>
                                     <div class="card-block text-center">
@@ -63,9 +62,9 @@
                                                         </td>
                                                         <td>
                                                             <!-- <a href="{{ route('hospitalization.show', $hospitalization->id) }}"
-                                                                        class="btn btn-icon btn-outline-primary">
-                                                                        <i class="feather icon-play"></i>
-                                                                    </a> -->
+                                                                            class="btn btn-icon btn-outline-primary">
+                                                                            <i class="feather icon-play"></i>
+                                                                        </a> -->
                                                         </td>
                                                     </tr>
                                                 @endforeach
