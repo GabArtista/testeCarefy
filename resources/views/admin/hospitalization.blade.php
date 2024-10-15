@@ -34,7 +34,7 @@
                             <div class="col-sm-12">
                                 <div class="card User-Activity">
                                     <div class="card-header">
-                                        <h5>Todas as internações</h5>
+                                        <h5>Todas as internações de hoje</h5>
                                         <div class="card-header-right">
                                             <a href="{{ route('hospitalization.listPatients') }}"
                                                 class="btn btn-icon btn-outline-primary"
@@ -63,9 +63,9 @@
                                                         </td>
                                                         <td>
                                                             <!-- <a href="{{ route('hospitalization.show', $hospitalization->id) }}"
-                                                                    class="btn btn-icon btn-outline-primary">
-                                                                    <i class="feather icon-play"></i>
-                                                                </a> -->
+                                                                        class="btn btn-icon btn-outline-primary">
+                                                                        <i class="feather icon-play"></i>
+                                                                    </a> -->
                                                         </td>
                                                     </tr>
                                                 @endforeach
