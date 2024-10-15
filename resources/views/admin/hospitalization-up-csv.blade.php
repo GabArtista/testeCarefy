@@ -137,7 +137,9 @@
                                     </div>
                                 </div>
 
-                                <button class="btn btn-primary mt-3" onclick="saveData()">Salvar Dados Válidos</button>
+                                <a class="btn btn-primary mt-3" href="{{ route('guides.import') }}">Salvar Dados
+                                    Válidos</a>
+
                             </div>
                         </div>
                     </div>

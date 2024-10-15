@@ -11,6 +11,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 
 
 class GuideController extends Controller
@@ -301,32 +302,45 @@ class GuideController extends Controller
             $arrayValues[$key]['var_isValid'] = $isValid;
             $arrayValues[$key]['var_errorMessages'] = $errorMessages;
         }
+        // dd($arrayValues);
 
+        // Armazena as entradas na sessão
+        session(['imported_data' => $arrayValues]);
         // Enviar dados para revisão do usuário
         return view('admin.hospitalization-up-csv', [
             'var_validEntries' => collect($arrayValues)->where('var_isValid', true)->all(),
             'var_invalidEntries' => collect($arrayValues)->where('var_isValid', false)->all()
         ]);
+
     }
 
-    public function confirmImport(Request $request)
+    public function confirmImport()
     {
-        $validatedData = $request->input('data');
+        // Recupera os dados da sessão
+        $validatedData = session('imported_data', []); // Define como array vazio se não existir
+
+        // Verifica se há entradas válidas antes de percorrer
+        if (empty($validatedData)) {
+            return back()->with('error', 'Nenhuma entrada válida encontrada para importação.');
+        }
 
         foreach ($validatedData as $row) {
             if ($row['var_isValid']) {
                 // Se o paciente já existir, utilizar o ID, senão criar um novo
                 $patient = Patient::whereHas('user', function ($query) use ($row) {
                     $query->where('name', $row['nome'])
-                        ->where('birth_date', Carbon::parse($row['nascimento']));
+                        ->where('birth_date', Carbon::createFromFormat('d/m/Y', $row['nascimento']));
                 })->first();
 
                 if (!$patient) {
+                    // Gerar um e-mail temporário único
+                    $uniqueEmail = $row['codigo'] . '-' . Str::uuid() . '@tempemail.com';
+
                     $user = User::create([
                         'name' => $row['nome'],
-                        'email' => 'sem@email.com',
+                        'email' => $uniqueEmail,
                         'password' => bcrypt('defaultpassword'),
-                        'birth_date' => Carbon::parse($row['nascimento']),
+                        'birth_date' => Carbon::createFromFormat('d/m/Y', $row['nascimento']),
                     ]);
 
                     $patient = Patient::create([
@@ -335,16 +349,18 @@ class GuideController extends Controller
                     ]);
                 }
 
+                // Criar uma nova guia
                 Guide::create([
                     'patient_id' => $patient->id,
                     'description' => $row['guia'],
-                    'entry' => Carbon::parse($row['entrada']),
-                    'exit' => isset($row['saida']) ? Carbon::parse($row['saida']) : null,
+                    'entry' => Carbon::createFromFormat('d/m/Y', $row['entrada']),
+                    'exit' => isset($row['saida']) ? Carbon::createFromFormat('d/m/Y', $row['saida']) : null,
                 ]);
             }
         }
 
         return redirect()->route('hospitalization.index')->with('success', 'Dados do CSV importados com sucesso!');
     }
+
 
 }

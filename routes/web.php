@@ -30,7 +30,8 @@ Route::get('/hospitalization/create-with-patient', [GuideController::class, 'cre
 
 
 Route::get('/hospitalization/csv', [GuideController::class, 'csvimport'])->name('hospitalization.csvimport');
-Route::post('guides-import', [GuideController::class, 'import'])->name('hospitalization.import');
+Route::get('/guides-import', [GuideController::class, 'confirmImport'])->name('guides.import');
+Route::post('/guides-import', [GuideController::class, 'confirmImport'])->name('hospitalization.confirmImport');
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -68,4 +69,9 @@ Route::middleware('auth')->group(function () {
 
     // Rota para salvar um paciente e uma internação
     Route::post('/hospitalization/store-with-patient', [GuideController::class, 'storeWithPatient'])->name('hospitalization.storeWithPatient');
+
+    // Adicione esta linha dentro do grupo de middleware 'auth' em routes/web.php
+    Route::post('/hospitalization/import', [GuideController::class, 'import'])->name('hospitalization.import');
+
+
 });
