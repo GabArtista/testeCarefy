@@ -86,6 +86,9 @@ sudo chown -Rf $USER:www-data .
 php artisan serve
 ```
 
+Login: admin@teste.com
+Senha: 123456
+
 ## Utilização
 
 -   Acessando a URL do projeto, você será direcionado para a _landing page_, onde existem algumas informações sobre o consultório médico e a plataforma de agendamento.
